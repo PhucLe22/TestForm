@@ -1,0 +1,77 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= title || 'Request Sent'
+    style.
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      h1 {
+        color: #28a745;
+        border-bottom: 2px solid #d4edda;
+        padding-bottom: 10px;
+      }
+      .request-details {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 20px;
+        border-left: 4px solid #28a745;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        background: #f1f1f1;
+        padding: 10px;
+        border-radius: 3px;
+        font-size: 14px;
+      }
+      .method {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 3px;
+        color: white;
+        font-weight: bold;
+        font-size: 0.8em;
+        text-transform: uppercase;
+      }
+      .method-get { background-color: #28a745; }
+      .method-post { background-color: #007bff; }
+      .method-put { background-color: #ffc107; color: #212529; }
+      .method-delete { background-color: #dc3545; }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+  body
+    h1 Request Sent Successfully
+    
+    .request-details
+      p
+        strong Method: 
+        span.method(class=`method-${method.toLowerCase()}`)= method
+      
+      p
+        strong URL: 
+        a(href=url, target="_blank")= url
+      
+      if timestamp
+        p
+          strong Timestamp: 
+          = new Date(timestamp).toLocaleString()
+    
+    p
+      | Make another 
+      a(href="/") request
+      | .

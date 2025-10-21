@@ -1,0 +1,98 @@
+doctype html
+html(lang="vi")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Tạo link request
+    style.
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f5f5f5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        width: 400px;
+      }
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      input, select, button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        margin-top: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .output {
+        margin-top: 20px;
+        word-wrap: break-word;
+        background: #f0f8ff;
+        padding: 10px;
+        border-radius: 8px;
+        font-family: monospace;
+      }
+  body
+    .container
+      h2 🔗 Tạo Link Request
+      form#linkForm
+        label(for="method") Chọn phương thức:
+        select#method(name="method")
+          option(value="GET") GET
+          option(value="POST") POST
+          option(value="PUT") PUT
+          option(value="DELETE") DELETE
+
+        label(for="url") Nhập URL:
+        input#url(type="text" name="url" placeholder="http://localhost:3000/api/...")
+
+        button(type="submit") Tạo link
+
+      .output#result
+
+    script.
+      const form = document.getElementById('linkForm');
+      const result = document.getElementById('result');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const method = document.getElementById('method').value;
+        const url = document.getElementById('url').value.trim();
+
+        if (!url) {
+          result.innerHTML = '<span style="color:red;">⚠️ Vui lòng nhập URL</span>';
+          return;
+        }
+
+        const fullLink = `http://localhost:3000/send?method=${encodeURIComponent(method)}&url=${encodeURIComponent(url)}`;
+        result.innerHTML = `
+          ✅ Link đã tạo:<br>
+          <a href="${fullLink}" target="_blank">${fullLink}</a>
+        `;
+      });
